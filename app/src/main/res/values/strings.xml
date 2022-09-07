@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">WSAMAD5</string>
+    <string name="sign_in">Sign In</string>
+    <string name="welcome">Welcome!</string>
+    <string name="if_you_don_t_have_account_credentials_you_can_take_it_nin_near_hospital_in_your_city_after_vaccination">if you don’t have account credentials, you can take it\nin near hospital in your city after vaccination</string>
+    <string name="your_login">Your Login</string>
+    <string name="your_password">Your Password</string>
+    <string name="we_can_t_find_account_with_this_credentials">We can’t find account with this credentials</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="wsa_care">WSA Care</string>
+    <string name="no_case">No case</string>
+    <string name="in_skill_area_nin_the_last_14_days">in skill area \nin the last 14 days</string>
+    <string name="in_skill_area_in_the_last_14_days">in skill area in the last 14 days</string>
+    <string name="clear">CLEAR</string>
+    <string name="name">Name:</string>
+    <string name="wear_mask_keep_2m_distance_wash_hands">* Wear mask. Keep 2m distance. Wash hands.</string>
+    <string name="how_are_you_feeling_today">How are you feeling today?</string>
+    <string name="check_in_now">Check in now</string>
+    <string name="why_do_this">Why do this?</string>
+    <string name="re_check_in">Re-check in</string>
+    <string name="you_have_checked_in_today">You have checked in today.</string>
+    <string name="qr_code">Qr Code</string>
+    <string name="you_need_to_have_access_to_internet">You need to have access to internet</string>
+    <string name="try_again">Try Again</string>
+    <string name="use_this_qr_code_in_restaraunts_and_aerports_nyou_can_t_give_it_to_anyone_else">Use this QR-code in restaraunts and aerports\nYou can’t give it to anyone else</string>
+    <string name="checklist">CheckList</string>
+    <string name="have_you_had_any_of_the_following_nsymptoms_in_the_last_24_hours">Have you had any of the following\nsymptoms in the last 24 hours ?</string>
+</resources>
