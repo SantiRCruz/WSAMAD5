@@ -3,6 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/santiago ASUS/StudioProjects/WSAMAD5/app/src/main/res/drawable/check_box.xml" value="0.1175" />
+        <entry key="..\:/Users/santiago ASUS/StudioProjects/WSAMAD5/app/src/main/res/layout/fragment_check_list.xml" value="0.2" />
+        <entry key="..\:/Users/santiago ASUS/StudioProjects/WSAMAD5/app/src/main/res/layout/fragment_home.xml" value="0.1578125" />
+        <entry key="..\:/Users/santiago ASUS/StudioProjects/WSAMAD5/app/src/main/res/layout/item_symptom.xml" value="0.264" />
         <entry key="app/src/main/res/drawable/gradient_blue.xml" value="0.232" />
         <entry key="app/src/main/res/drawable/round_tpl_btr.xml" value="0.232" />
         <entry key="app/src/main/res/drawable/round_white.xml" value="0.232" />
