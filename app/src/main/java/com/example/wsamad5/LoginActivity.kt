@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.widget.addTextChangedListener
 import com.example.wsamad5.core.Constants
 import com.example.wsamad5.core.Validations
 import com.example.wsamad5.core.networkInfo
@@ -20,6 +21,7 @@ import org.json.JSONObject
 import org.json.JSONTokener
 import java.io.IOException
 import java.lang.invoke.ConstantCallSite
+import java.util.regex.Pattern
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -31,7 +33,28 @@ class LoginActivity : AppCompatActivity() {
 
 
         clicks()
+//        writingValidations()
 
+    }
+
+    private fun writingValidations() {
+        emailWriting()
+    }
+
+    private fun emailWriting() {
+        binding.edtEmail.addTextChangedListener {
+            val regex = Pattern.compile("^([a-zA-Z]{1,}@wsa[.]com)")
+            if (it.isNullOrEmpty()) {
+                binding.edtEmail.error = "The email can't be empty"
+                binding.btnSignIn.isEnabled = false
+            } else if (!regex.matcher(it).matches()) {
+                binding.edtEmail.error = "The Must have and email format"
+                binding.btnSignIn.isEnabled = false
+            } else {
+                binding.edtEmail.error = null
+                binding.btnSignIn.isEnabled = true
+            }
+        }
     }
 
     private fun clicks() {

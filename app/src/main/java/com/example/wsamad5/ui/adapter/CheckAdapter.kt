@@ -27,4 +27,11 @@ class CheckAdapter(private val list :List<Symptom>):RecyclerView.Adapter<CheckAd
             binding.txtTitle.text = item.title
         }
     }
+    fun checkedBoxes():List<Int>{
+        val listSend = mutableListOf<Int>()
+        for (i in checkBoxList.indices){
+            if (checkBoxList[i].isChecked) listSend.add(list[i].id)
+        }
+        return listSend
+    }
 }

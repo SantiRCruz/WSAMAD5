@@ -1,5 +1,6 @@
 package com.example.wsamad5.ui
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -12,11 +13,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.wsamad5.R
 import com.example.wsamad5.core.Constants
-import com.example.wsamad5.data.get
+import com.example.wsamad5.data.*
 import com.example.wsamad5.data.models.Symptom
+import com.example.wsamad5.databinding.DialogLoadBinding
 import com.example.wsamad5.databinding.FragmentCheckListBinding
 import com.example.wsamad5.ui.adapter.CheckAdapter
 import com.google.android.material.snackbar.Snackbar
@@ -43,6 +46,8 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list) {
                 val column = cursor!!.getColumnIndex(MediaStore.Images.Media.DATA)
                 if (cursor.moveToNext()) uriResult = Uri.parse(cursor.getString(column))
 
+
+                binding.imgClose.visibility = View.VISIBLE
                 binding.imgAdd.setImageURI(uriResult)
             }
 
@@ -72,6 +77,99 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list) {
 
     private fun clicks() {
         binding.imgAdd.setOnClickListener { checkPermission() }
+        binding.imgClose.setOnClickListener {
+            binding.imgClose.visibility = View.GONE
+            uriResult = null
+            binding.imgAdd.setImageResource(R.drawable.add)
+        }
+        binding.btnConfirm.setOnClickListener { sendDialog() }
+    }
+
+    private fun sendDialog() {
+        AlertDialog.Builder(requireContext())
+            .setTitle("You really want to send that?")
+            .setNegativeButton("No") { d, a ->
+                d.dismiss()
+            }
+            .setPositiveButton("Yes") { d, a ->
+                validateData()
+                d.dismiss()
+            }
+            .setCancelable(false)
+            .show()
+    }
+
+    private fun validateData() {
+        if (uriResult == null) {
+            Snackbar.make(binding.root, "You must send an image", Snackbar.LENGTH_SHORT).show()
+            return
+        }
+        if ((binding.rvList.adapter as CheckAdapter).checkedBoxes().isNullOrEmpty()) {
+            Snackbar.make(
+                binding.root,
+                "You must check at least one parameter of the list ",
+                Snackbar.LENGTH_SHORT
+            ).show()
+            return
+        }
+
+        sendCheckList()
+        sendPhoto()
+
+    }
+
+    private fun sendPhoto() {
+        val dialogBinding = DialogLoadBinding.inflate(LayoutInflater.from(requireContext()))
+        val alertDialog = AlertDialog.Builder(requireContext()).apply {
+            setView(dialogBinding.root)
+        }.create()
+
+        alertDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+
+        Constants.OKHTTP.newCall(post2("https://cloudlabs-image-object-detection.p.rapidapi.com/objectDetection/byImageFile",
+            photo(uriResult!!))).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                Log.e("onFailure: ", e.message.toString())
+                Snackbar.make(binding.root, "Server Error!", Snackbar.LENGTH_SHORT).show()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val json = JSONTokener(response.body!!.string()).nextValue() as JSONObject
+                if (json.getString("status")=="success"){
+                    alertDialog.dismiss()
+                    Snackbar.make(binding.root, "The photo was successfully sent", Snackbar.LENGTH_SHORT).show()
+                    requireActivity().runOnUiThread {
+                        findNavController().popBackStack()
+                    }
+                }else{
+                    Snackbar.make(binding.root, "The photo was unsuccessfully sent", Snackbar.LENGTH_SHORT).show()
+                }
+            }
+        })
+    }
+
+    private fun sendCheckList() {
+        Constants.OKHTTP.newCall(
+            post(
+                "day_symptoms",
+                list((binding.rvList.adapter as CheckAdapter).checkedBoxes())
+            )
+        ).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                Log.e("onFailure: ", e.message.toString())
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val json = JSONTokener(response.body!!.string()).nextValue() as JSONObject
+                if (json.getBoolean("success")) {
+                    Snackbar.make(binding.root, "Symptoms List Send Correctly", Snackbar.LENGTH_SHORT).show()
+                } else {
+                    Snackbar.make(binding.root, "Symptoms List Send unsuccessfully", Snackbar.LENGTH_SHORT).show()
+                }
+            }
+        })
     }
 
     private fun checkPermission() {
